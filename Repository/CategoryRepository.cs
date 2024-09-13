@@ -55,7 +55,16 @@ namespace MoviesAPI.Repository
         public bool UpdateCategory(Category category)
         {
             category.CreationDate = DateTime.Now;
-            _dbContext.Update(category);
+
+            var existsCategory = _dbContext.Category.Find(category.Id);
+            if (existsCategory != null)
+            {
+                _dbContext.Entry(existsCategory).CurrentValues.SetValues(category);
+            }
+            else
+            {
+                _dbContext.Update(category);
+            }
             return Save();
         }
     }
