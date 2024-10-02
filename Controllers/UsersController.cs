@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MoviesAPI.Models;
@@ -23,6 +24,7 @@ namespace MoviesAPI.Controllers
             this._apiResponse = new();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -39,6 +41,7 @@ namespace MoviesAPI.Controllers
             return Ok(userListDto);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{userId:int}", Name = "GetUser")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -57,6 +60,7 @@ namespace MoviesAPI.Controllers
             return Ok(userItemDto);
         }
 
+        [AllowAnonymous]
         [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -96,6 +100,7 @@ namespace MoviesAPI.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

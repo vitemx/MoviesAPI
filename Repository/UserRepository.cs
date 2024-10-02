@@ -62,7 +62,7 @@ namespace MoviesAPI.Repository
                     new Claim(ClaimTypes.Name, user.UserName ?? "".ToString()),
                     new Claim(ClaimTypes.Role, user.Role ?? "")
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
