@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoviesAPI.Models;
 using MoviesAPI.Models.Dtos;
@@ -6,6 +7,7 @@ using MoviesAPI.Repository.IRepository;
 
 namespace MoviesAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
@@ -18,6 +20,7 @@ namespace MoviesAPI.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -34,7 +37,7 @@ namespace MoviesAPI.Controllers
             return Ok(listaCategoriasDto);
         }
 
-
+        [AllowAnonymous]
         [HttpGet("{categoryId:int}", Name = "GetCategory")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -53,6 +56,7 @@ namespace MoviesAPI.Controllers
             return Ok(itemCategoryDto);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -87,6 +91,7 @@ namespace MoviesAPI.Controllers
             return CreatedAtRoute("GetCategory", new { categoryId = category.Id }, category);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{categoryId:int}", Name = "UpdateCategory")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -115,6 +120,7 @@ namespace MoviesAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{categoryId:int}", Name = "UpdatePutCategory")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -150,6 +156,7 @@ namespace MoviesAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{categoryId:int}", Name = "DeleteCategory")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

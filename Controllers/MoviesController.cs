@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MoviesAPI.Models;
@@ -19,7 +20,7 @@ namespace MoviesAPI.Controllers
             _mapper = mapper;
             _movieRepository = movieRepository;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -36,6 +37,7 @@ namespace MoviesAPI.Controllers
             return Ok(moviesListDto);
         }
 
+        [AllowAnonymous]
         [HttpGet("{movieId:int}")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -54,6 +56,7 @@ namespace MoviesAPI.Controllers
             return Ok(movieItemDto);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -88,6 +91,7 @@ namespace MoviesAPI.Controllers
             return CreatedAtRoute("GetMovie", new { movieId = movie.Id }, movie);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{movieId:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -122,6 +126,7 @@ namespace MoviesAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{movieId:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -146,6 +151,7 @@ namespace MoviesAPI.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpGet("GetMovieWithCategory/{categoryId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -168,6 +174,7 @@ namespace MoviesAPI.Controllers
             return Ok(itemPelicula);
         }
 
+        [AllowAnonymous]
         [HttpGet("SearchMovie")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
